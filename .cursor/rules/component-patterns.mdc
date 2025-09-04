@@ -1,0 +1,138 @@
+---
+globs: components/**/*.tsx,app/**/*.tsx
+description: 컴포넌트 개발 패턴 및 가이드라인
+---
+
+# 컴포넌트 개발 패턴
+
+## shadcn/ui 컴포넌트 사용
+
+### 기본 패턴
+
+```typescript
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+```
+
+### 컴포넌트 조합
+
+- `Card` + `CardContent` + `CardHeader` 조합으로 콘텐츠 카드 구성
+- `Button`에 `variant`, `size` props 활용
+- `Badge`로 태그나 상태 표시
+
+## 도시 카드 패턴
+
+```typescript
+<Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+	<div className="relative overflow-hidden">
+		<img
+			src={city.image}
+			alt={`${city.name} 도시 전경`}
+			className="w-full h-44 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+		/>
+		<Badge className="absolute top-3 right-3">
+			<Star size={12} className="mr-1 fill-current" />
+			{city.nomadScore}
+		</Badge>
+	</div>
+	<CardContent className="p-3 sm:p-4">{/* 카드 내용 */}</CardContent>
+</Card>
+```
+
+## 반응형 디자인 패턴
+
+### Breakpoint 사용
+
+- `sm:` - 640px 이상
+- `md:` - 768px 이상
+- `lg:` - 1024px 이상
+- `xl:` - 1280px 이상
+
+### 반응형 그리드
+
+```typescript
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+	{/* 그리드 아이템들 */}
+</div>
+```
+
+### 반응형 텍스트
+
+```typescript
+<h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">제목</h1>
+```
+
+## 상태 관리 패턴
+
+### 필터링 상태
+
+```typescript
+const [selectedRegion, setSelectedRegion] = useState("all");
+const [searchQuery, setSearchQuery] = useState("");
+const [sortBy, setSortBy] = useState("nomad-score");
+```
+
+### 계산된 값
+
+```typescript
+const filteredAndSortedCities = useMemo(() => {
+	let filtered = cities;
+
+	if (selectedRegion !== "all") {
+		filtered = filtered.filter((city) => city.region === selectedRegion);
+	}
+
+	if (searchQuery.trim()) {
+		filtered = filtered.filter(/* 검색 로직 */);
+	}
+
+	return filtered.sort(/* 정렬 로직 */);
+}, [selectedRegion, searchQuery, sortBy]);
+```
+
+## 접근성 패턴
+
+### 키보드 네비게이션
+
+```typescript
+<button
+	onClick={handleClick}
+	className="focus:outline-none focus:ring-2 focus:ring-primary"
+	aria-label="도시 선택"
+>
+	버튼
+</button>
+```
+
+### 스크린 리더 지원
+
+```typescript
+<img
+	src={city.image}
+	alt={`${city.name} 도시 전경`}
+	className="w-full h-48 object-cover"
+/>
+```
+
+## 애니메이션 패턴
+
+### 호버 효과
+
+```typescript
+<div className="group hover:shadow-lg transition-shadow duration-300">
+	<img className="group-hover:scale-105 transition-transform duration-300" />
+</div>
+```
+
+### 페이드 전환
+
+```typescript
+<div
+	className={`transition-opacity duration-1000 ${
+		isActive ? "opacity-100" : "opacity-0"
+	}`}
+>
+	콘텐츠
+</div>
+```

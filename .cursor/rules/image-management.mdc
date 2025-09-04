@@ -1,0 +1,122 @@
+---
+globs: download-*.js,public/**/*.jpg,public/**/*.png,public/**/*.svg
+description: 이미지 관리 및 다운로드 스크립트 가이드
+---
+
+# 이미지 관리 가이드
+
+## 이미지 다운로드 스크립트
+
+### 도시 이미지 다운로드
+
+- **스크립트**: [download-images.js](mdc:download-images.js)
+- **API**: Unsplash API 사용
+- **대상**: 12개 도시별 썸네일 이미지
+- **저장 위치**: `/public/city/`
+
+### 히어로 이미지 다운로드
+
+- **스크립트**: [download-hero-images.js](mdc:download-hero-images.js)
+- **API**: Unsplash API 사용
+- **대상**: 4개 히어로 섹션 이미지
+- **저장 위치**: `/public/hero/`
+
+## 이미지 파일 구조
+
+### 도시 이미지
+
+```
+public/city/
+├── gangnam.jpg      # 강남구
+├── hongdae.jpg      # 홍대
+├── pangyo.jpg       # 판교
+├── haeundae.jpg     # 해운대
+├── jeju.jpg         # 제주시
+├── songdo.jpg       # 송도
+├── daejeon.jpg      # 대전 유성구
+├── gwangju.jpg      # 광주 상무지구
+├── chuncheon.jpg    # 춘천
+├── sejong.jpg       # 세종시
+├── suwon.jpg        # 수원
+├── daegu.jpg        # 대구 수성구
+└── seoul.jpg        # 서울 (기존)
+```
+
+### 히어로 이미지
+
+```
+public/hero/
+├── hero-main.jpg      # 메인 히어로 (디지털 노마드 카페 작업)
+├── hero-seoul.jpg     # 서울 스카이라인
+├── hero-workspace.jpg # 모던 워크스페이스
+└── hero-travel.jpg    # 디지털 노마드 여행
+```
+
+## 스크립트 실행 방법
+
+### 도시 이미지 다운로드
+
+```bash
+node download-images.js
+```
+
+### 히어로 이미지 다운로드
+
+```bash
+node download-hero-images.js
+```
+
+## 이미지 최적화
+
+### 권장 사항
+
+- **도시 이미지**: 400x300px, JPEG 형식
+- **히어로 이미지**: 1920x1080px, JPEG 형식
+- **품질**: 80-90% 압축률
+- **파일 크기**: 100KB-500KB (도시), 1MB-2MB (히어로)
+
+### Unsplash API 설정
+
+```javascript
+const UNSPLASH_ACCESS_KEY = "YOUR_API_KEY";
+const imageUrl = data.results[0].urls.regular; // 도시용
+const imageUrl = data.results[0].urls.full; // 히어로용
+```
+
+## 이미지 사용 패턴
+
+### 도시 카드 이미지
+
+```typescript
+<img
+	src={city.image || "/placeholder.svg"}
+	alt={`${city.name} 도시 전경`}
+	className="w-full h-44 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+/>
+```
+
+### 히어로 슬라이더 이미지
+
+```typescript
+{
+	heroImages.map((image, index) => (
+		<img
+			key={index}
+			src={image}
+			alt={`Digital nomad scene ${index + 1}`}
+			className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+				index === currentHeroImage ? "opacity-100" : "opacity-0"
+			}`}
+		/>
+	));
+}
+```
+
+## 새 이미지 추가 시 체크리스트
+
+1. **API 키 확인**: Unsplash API 키가 유효한지 확인
+2. **검색어 최적화**: 적절한 키워드로 검색 결과 개선
+3. **파일명 규칙**: 일관된 네이밍 컨벤션 사용
+4. **이미지 품질**: 고해상도, 적절한 압축률
+5. **코드 업데이트**: 이미지 경로를 코드에 반영
+6. **테스트**: 모든 화면 크기에서 이미지 표시 확인

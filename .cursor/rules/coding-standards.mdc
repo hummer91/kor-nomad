@@ -1,0 +1,94 @@
+---
+globs: *.ts,*.tsx,*.js,*.jsx
+description: 코딩 스타일 및 표준 가이드라인
+---
+
+# 코딩 스타일 및 표준
+
+## TypeScript/React 규칙
+
+### Import 순서
+
+1. React 관련 imports
+2. Next.js 관련 imports
+3. Third-party 라이브러리
+4. 내부 컴포넌트 (@/components)
+5. 내부 유틸리티 (@/lib, @/hooks)
+6. 상대 경로 imports
+
+### 컴포넌트 구조
+
+```typescript
+"use client"; // 클라이언트 컴포넌트인 경우
+
+// 1. Imports
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+
+// 2. Types/Interfaces
+interface ComponentProps {
+	title: string;
+	onClick: () => void;
+}
+
+// 3. Constants
+const CONSTANT_VALUE = "value";
+
+// 4. Main Component
+export default function Component({ title, onClick }: ComponentProps) {
+	// 5. State
+	const [state, setState] = useState("");
+
+	// 6. Effects
+	useEffect(() => {
+		// effect logic
+	}, []);
+
+	// 7. Event handlers
+	const handleClick = () => {
+		onClick();
+	};
+
+	// 8. Render
+	return (
+		<div>
+			<h1>{title}</h1>
+			<Button onClick={handleClick}>Click me</Button>
+		</div>
+	);
+}
+```
+
+### 네이밍 컨벤션
+
+- **컴포넌트**: PascalCase (예: `CityCard`, `HeroSection`)
+- **변수/함수**: camelCase (예: `selectedRegion`, `handleClick`)
+- **상수**: UPPER_SNAKE_CASE (예: `MAX_CITIES`, `API_URL`)
+- **파일명**: kebab-case (예: `city-card.tsx`, `hero-section.tsx`)
+
+### TypeScript 규칙
+
+- 모든 props에 타입 정의
+- `any` 타입 사용 금지
+- Optional props는 `?` 사용
+- Interface는 `I` 접두사 없이 사용
+
+### CSS/Tailwind 규칙
+
+- Tailwind CSS 클래스 우선 사용
+- 커스텀 스타일은 `globals.css`에 정의
+- 반응형 디자인: `sm:`, `md:`, `lg:` 접두사 사용
+- 접근성: `aria-label`, `role` 속성 적절히 사용
+
+### 상태 관리
+
+- 로컬 상태: `useState`
+- 계산된 값: `useMemo`
+- 사이드 이펙트: `useEffect`
+- 복잡한 상태는 `useReducer` 고려
+
+### 이벤트 핸들러
+
+- `handle` 접두사 사용 (예: `handleClick`, `handleSubmit`)
+- 인라인 함수보다 별도 함수로 정의
+- 이벤트 타입 명시: `(e: React.MouseEvent<HTMLButtonElement>) => void`

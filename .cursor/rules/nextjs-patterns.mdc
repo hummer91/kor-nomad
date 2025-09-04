@@ -1,0 +1,229 @@
+---
+globs: app/**/*.tsx,app/**/*.ts,next.config.mjs
+description: Next.js App Router 패턴 및 모범 사례
+---
+
+# Next.js App Router 패턴
+
+## 프로젝트 설정
+
+### Next.js 14 App Router 구조
+
+```
+app/
+├── layout.tsx        # 루트 레이아웃
+├── page.tsx          # 홈페이지
+├── loading.tsx       # 로딩 UI
+└── globals.css       # 전역 스타일
+```
+
+### 설정 파일
+
+- [next.config.mjs](mdc:next.config.mjs) - Next.js 설정
+- [tsconfig.json](mdc:tsconfig.json) - TypeScript 설정
+- [tailwind.config.js](mdc:tailwind.config.js) - Tailwind CSS 설정
+
+## 컴포넌트 패턴
+
+### 클라이언트 컴포넌트
+
+```typescript
+"use client";
+
+import { useState, useEffect } from "react";
+
+export default function ClientComponent() {
+	// 클라이언트 사이드 로직
+}
+```
+
+### 서버 컴포넌트 (기본)
+
+```typescript
+// "use client" 없이 작성
+export default function ServerComponent() {
+	// 서버 사이드 렌더링
+}
+```
+
+## 라우팅 패턴
+
+### 페이지 라우팅
+
+- `app/page.tsx` → `/`
+- `app/about/page.tsx` → `/about`
+- `app/cities/[id]/page.tsx` → `/cities/1`, `/cities/2`
+
+### 동적 라우팅
+
+```typescript
+// app/cities/[id]/page.tsx
+interface PageProps {
+	params: { id: string };
+}
+
+export default function CityPage({ params }: PageProps) {
+	const cityId = params.id;
+	// 도시 상세 정보 렌더링
+}
+```
+
+## 레이아웃 패턴
+
+### 루트 레이아웃
+
+```typescript
+// app/layout.tsx
+export default function RootLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<html lang="ko">
+			<body>
+				<ThemeProvider>{children}</ThemeProvider>
+			</body>
+		</html>
+	);
+}
+```
+
+### 중첩 레이아웃
+
+```typescript
+// app/dashboard/layout.tsx
+export default function DashboardLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<div className="dashboard-layout">
+			<Sidebar />
+			<main>{children}</main>
+		</div>
+	);
+}
+```
+
+## 상태 관리 패턴
+
+### 클라이언트 상태
+
+```typescript
+const [selectedRegion, setSelectedRegion] = useState("all");
+const [searchQuery, setSearchQuery] = useState("");
+const [sortBy, setSortBy] = useState("nomad-score");
+```
+
+### 계산된 상태
+
+```typescript
+const filteredAndSortedCities = useMemo(() => {
+	// 필터링 및 정렬 로직
+}, [selectedRegion, searchQuery, sortBy]);
+```
+
+## 성능 최적화
+
+### 이미지 최적화
+
+```typescript
+import Image from "next/image";
+
+<Image
+	src="/city/gangnam.jpg"
+	alt="강남구 도시 전경"
+	width={400}
+	height={300}
+	className="object-cover"
+	priority // 첫 화면 이미지인 경우
+/>;
+```
+
+### 동적 임포트
+
+```typescript
+import dynamic from "next/dynamic";
+
+const HeavyComponent = dynamic(() => import("./HeavyComponent"), {
+	loading: () => <p>Loading...</p>,
+});
+```
+
+## SEO 및 메타데이터
+
+### 메타데이터 설정
+
+```typescript
+// app/page.tsx
+export const metadata = {
+	title: "KOR NOMAD - 한국 디지털 노마드 도시 가이드",
+	description: "한국 디지털 노마드를 위한 최고의 도시 찾기",
+	keywords: ["디지털 노마드", "한국", "도시", "생활비"],
+};
+```
+
+### 동적 메타데이터
+
+```typescript
+// app/cities/[id]/page.tsx
+export async function generateMetadata({ params }: PageProps) {
+	const city = await getCity(params.id);
+
+	return {
+		title: `${city.name} - KOR NOMAD`,
+		description: `${city.name} 디지털 노마드 정보`,
+	};
+}
+```
+
+## API 라우트 패턴
+
+### API 라우트 생성
+
+```typescript
+// app/api/cities/route.ts
+export async function GET() {
+	const cities = await getCities();
+	return Response.json(cities);
+}
+
+export async function POST(request: Request) {
+	const data = await request.json();
+	// 도시 데이터 처리
+	return Response.json({ success: true });
+}
+```
+
+## 환경 변수
+
+### .env.local 설정
+
+```bash
+NEXT_PUBLIC_UNSPLASH_ACCESS_KEY=your_key_here
+UNSPLASH_ACCESS_KEY=your_key_here
+```
+
+### 환경 변수 사용
+
+```typescript
+const apiKey = process.env.NEXT_PUBLIC_UNSPLASH_ACCESS_KEY;
+```
+
+## 빌드 및 배포
+
+### 빌드 명령어
+
+```bash
+npm run build    # 프로덕션 빌드
+npm run dev      # 개발 서버
+npm run start    # 프로덕션 서버
+npm run lint     # 린팅
+```
+
+### 정적 파일 서빙
+
+- `public/` 폴더의 파일들은 `/` 경로로 접근 가능
+- 예: `public/city/gangnam.jpg` → `/city/gangnam.jpg`

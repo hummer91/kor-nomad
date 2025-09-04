@@ -1,0 +1,119 @@
+---
+globs: app/page.tsx
+description: 데이터 구조 및 타입 정의 가이드
+---
+
+# 데이터 구조 및 타입 정의
+
+## 도시 데이터 구조
+
+### City 타입 정의
+
+```typescript
+interface City {
+	id: number;
+	name: string; // 도시명 (예: "강남구", "홍대")
+	region: string; // 지역 ID (예: "seoul", "busan")
+	regionName: string; // 지역명 (예: "서울특별시", "부산광역시")
+	image: string; // 이미지 경로 (예: "/city/gangnam.jpg")
+	nomadScore: number; // 노마드 점수 (1-5)
+	monthlyCost: number; // 월 생활비 (원)
+	internetSpeed: number; // 평균 인터넷 속도 (Mbps)
+	cafeDensity: string; // 카페 밀도 ("높음", "보통", "낮음")
+	tags: string[]; // 태그 배열 (예: ["IT허브", "비즈니스"])
+}
+```
+
+### Region 타입 정의
+
+```typescript
+interface Region {
+	id: string; // 지역 ID (예: "seoul", "gyeonggi")
+	name: string; // 지역명 (예: "서울특별시", "경기도")
+	count: number; // 해당 지역 도시 수
+}
+```
+
+## 현재 도시 데이터 (12개)
+
+### 서울특별시
+
+- **강남구**: IT허브, 비즈니스, 쇼핑 (노마드 점수: 4.8)
+- **홍대**: 창작, 문화, 청년 (노마드 점수: 4.6)
+
+### 경기도
+
+- **판교**: 테크밸리, 스타트업, IT (노마드 점수: 4.7)
+- **수원**: 역사, 전통, 문화재 (노마드 점수: 4.0)
+
+### 부산광역시
+
+- **해운대**: 해변, 관광, 휴양 (노마드 점수: 4.3)
+
+### 제주특별자치도
+
+- **제주시**: 자연, 힐링, 워케이션 (노마드 점수: 4.5)
+
+### 인천광역시
+
+- **송도**: 스마트시티, 국제, 신도시 (노마드 점수: 4.4)
+
+### 대전광역시
+
+- **대전 유성구**: 연구, 과학, 대학 (노마드 점수: 4.2)
+
+### 광주광역시
+
+- **광주 상무지구**: 문화, 예술, 전통 (노마드 점수: 4.0)
+
+### 강원도
+
+- **춘천**: 자연, 호수, 조용함 (노마드 점수: 3.9)
+
+### 세종특별자치시
+
+- **세종시**: 행정, 신도시, 계획도시 (노마드 점수: 4.1)
+
+### 대구광역시
+
+- **대구 수성구**: 주거, 교육, 안정 (노마드 점수: 3.8)
+
+## 정렬 옵션
+
+```typescript
+interface SortOption {
+	id: string;
+	name: string;
+	icon: LucideIcon;
+}
+
+const sortOptions: SortOption[] = [
+	{ id: "nomad-score", name: "노마드 점수 순", icon: Star },
+	{ id: "cost-low", name: "생활비 낮은 순", icon: DollarSign },
+	{ id: "cost-high", name: "생활비 높은 순", icon: DollarSign },
+	{ id: "internet-speed", name: "인터넷 속도 순", icon: Wifi },
+	{ id: "name", name: "도시명 가나다순", icon: ArrowUpDown },
+];
+```
+
+## 이미지 경로 구조
+
+### 도시 이미지
+
+- 경로: `/public/city/`
+- 파일명: `{도시명}.jpg` (예: `gangnam.jpg`, `hongdae.jpg`)
+- 크기: 400x300px 권장
+
+### 히어로 이미지
+
+- 경로: `/public/hero/`
+- 파일명: `hero-{타입}.jpg`
+- 타입: `main`, `seoul`, `workspace`, `travel`
+
+## 데이터 수정 시 주의사항
+
+1. **새 도시 추가**: `cities` 배열에 객체 추가
+2. **이미지 변경**: `public/city/` 폴더에 이미지 파일 추가 후 경로 수정
+3. **지역 추가**: `regions` 배열에 지역 정보 추가
+4. **정렬 옵션**: `sortOptions` 배열에 새 옵션 추가
+5. **타입 변경**: TypeScript 인터페이스도 함께 수정

@@ -1,0 +1,239 @@
+---
+globs: *.css,*.tsx,*.ts
+description: Tailwind CSS 및 스타일링 가이드
+---
+
+# 스타일링 가이드
+
+## Tailwind CSS 설정
+
+### 프로젝트 설정
+
+- **Tailwind CSS**: 4.1.9
+- **PostCSS**: 8.5
+- **Autoprefixer**: 10.4.20
+- **설정 파일**: [postcss.config.mjs](mdc:postcss.config.mjs)
+
+### CSS 파일 구조
+
+- [app/globals.css](mdc:app/globals.css) - 전역 스타일
+- [styles/globals.css](mdc:styles/globals.css) - 추가 전역 스타일
+
+## 색상 시스템
+
+### 기본 색상
+
+```css
+:root {
+	--background: 0 0% 100%;
+	--foreground: 222.2 84% 4.9%;
+	--primary: 222.2 47.4% 11.2%;
+	--primary-foreground: 210 40% 98%;
+	--accent: 210 40% 96%;
+	--accent-foreground: 222.2 47.4% 11.2%;
+	--muted: 210 40% 96%;
+	--muted-foreground: 215.4 16.3% 46.9%;
+	--border: 214.3 31.8% 91.4%;
+	--card: 0 0% 100%;
+	--card-foreground: 222.2 84% 4.9%;
+}
+```
+
+### 다크 모드
+
+```css
+.dark {
+	--background: 222.2 84% 4.9%;
+	--foreground: 210 40% 98%;
+	/* ... 다크 모드 색상 */
+}
+```
+
+## 반응형 디자인
+
+### Breakpoint 시스템
+
+```typescript
+// 모바일 우선 접근법
+className = "text-sm sm:text-base md:text-lg lg:text-xl";
+
+// 그리드 레이아웃
+className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4";
+
+// 패딩/마진
+className = "p-4 sm:p-6 lg:p-8";
+```
+
+### 반응형 텍스트
+
+```typescript
+// 제목
+className = "text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold";
+
+// 본문
+className = "text-base sm:text-lg md:text-xl";
+
+// 작은 텍스트
+className = "text-xs sm:text-sm";
+```
+
+## 컴포넌트 스타일링
+
+### 카드 컴포넌트
+
+```typescript
+<Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
+	<CardContent className="p-3 sm:p-4">{/* 카드 내용 */}</CardContent>
+</Card>
+```
+
+### 버튼 스타일
+
+```typescript
+<Button
+	size="lg"
+	className="bg-accent hover:bg-accent/90 text-accent-foreground px-6 sm:px-8 py-3 sm:py-4"
+>
+	버튼 텍스트
+</Button>
+```
+
+### 배지 스타일
+
+```typescript
+<Badge className="bg-primary text-primary-foreground text-xs sm:text-sm">
+	<Star size={12} className="mr-1 fill-current" />
+	점수
+</Badge>
+```
+
+## 애니메이션 패턴
+
+### 호버 효과
+
+```typescript
+className = "group hover:shadow-lg transition-shadow duration-300";
+className = "group-hover:scale-105 transition-transform duration-300";
+```
+
+### 페이드 전환
+
+```typescript
+className={`transition-opacity duration-1000 ${
+  isActive ? 'opacity-100' : 'opacity-0'
+}`}
+```
+
+### 부드러운 스크롤
+
+```typescript
+className = "scroll-smooth";
+```
+
+## 레이아웃 패턴
+
+### 컨테이너
+
+```typescript
+<div className="max-w-7xl mx-auto px-4 sm:px-6">{/* 콘텐츠 */}</div>
+```
+
+### 섹션 간격
+
+```typescript
+<section className="py-12 sm:py-16">{/* 섹션 내용 */}</section>
+```
+
+### 플렉스 레이아웃
+
+```typescript
+<div className="flex flex-col gap-3 sm:gap-4 md:flex-row">
+	{/* 플렉스 아이템들 */}
+</div>
+```
+
+## 접근성 스타일링
+
+### 포커스 상태
+
+```typescript
+className =
+	"focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2";
+```
+
+### 스크린 리더 전용 텍스트
+
+```typescript
+<span className="sr-only">스크린 리더용 텍스트</span>
+```
+
+### 고대비 모드
+
+```typescript
+className = "text-foreground bg-background border-border";
+```
+
+## 커스텀 유틸리티
+
+### 유틸리티 함수
+
+```typescript
+// lib/utils.ts
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
+```
+
+### 사용 예시
+
+```typescript
+import { cn } from "@/lib/utils";
+
+<div
+	className={cn(
+		"base-classes",
+		condition && "conditional-classes",
+		variant === "primary" && "primary-classes"
+	)}
+>
+	콘텐츠
+</div>;
+```
+
+## 모바일 최적화
+
+### 터치 친화적 크기
+
+```typescript
+className = "min-h-[44px] touch-manipulation"; // 최소 44px 터치 영역
+```
+
+### 모바일 네비게이션
+
+```typescript
+className = "md:hidden"; // 모바일에서만 표시
+className = "hidden md:block"; // 데스크톱에서만 표시
+```
+
+### 스크롤 영역
+
+```typescript
+className = "max-h-64 overflow-y-auto"; // 스크롤 가능한 영역
+```
+
+## 성능 최적화
+
+### CSS-in-JS 대신 Tailwind 사용
+
+- 런타임 오버헤드 최소화
+- 번들 크기 최적화
+- 개발자 경험 향상
+
+### 조건부 스타일링
+
+```typescript
+className={`base-classes ${isActive ? 'active-classes' : 'inactive-classes'}`}
+```

@@ -1,0 +1,70 @@
+---
+alwaysApply: true
+description: KOR NOMAD 프로젝트 전체 구조 및 기술 스택 가이드
+---
+
+# KOR NOMAD 프로젝트 개요
+
+## 프로젝트 소개
+
+KOR NOMAD는 한국 디지털 노마드를 위한 도시 추천 플랫폼입니다. 각 도시의 생활비, 인터넷 속도, 카페 밀도 등의 정보를 제공하여 디지털 노마드들이 최적의 도시를 선택할 수 있도록 도와줍니다.
+
+## 기술 스택
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4.1.9
+- **UI Components**: shadcn/ui (Radix UI 기반)
+- **Icons**: Lucide React
+- **State Management**: React Hooks (useState, useMemo, useEffect)
+- **Image Source**: Unsplash API
+
+## 프로젝트 구조
+
+### 핵심 파일들
+
+- [app/page.tsx](mdc:app/page.tsx) - 메인 페이지 (도시 목록, 필터링, 검색 기능)
+- [app/layout.tsx](mdc:app/layout.tsx) - 루트 레이아웃
+- [app/globals.css](mdc:app/globals.css) - 전역 스타일
+- [components.json](mdc:components.json) - shadcn/ui 설정
+
+### 디렉토리 구조
+
+```
+app/                    # Next.js App Router
+├── page.tsx           # 메인 페이지
+├── layout.tsx         # 루트 레이아웃
+├── loading.tsx        # 로딩 컴포넌트
+└── globals.css        # 전역 스타일
+
+components/            # 재사용 가능한 컴포넌트
+├── ui/               # shadcn/ui 컴포넌트들
+└── theme-provider.tsx # 테마 프로바이더
+
+public/               # 정적 자산
+├── city/            # 도시별 썸네일 이미지
+├── hero/            # 히어로 섹션 이미지
+└── placeholder.*    # 플레이스홀더 이미지들
+
+lib/                  # 유틸리티 함수
+└── utils.ts         # 공통 유틸리티
+
+hooks/                # 커스텀 훅
+├── use-mobile.ts    # 모바일 감지 훅
+└── use-toast.ts     # 토스트 알림 훅
+```
+
+## 주요 기능
+
+1. **도시 목록 표시**: 12개 주요 도시의 정보 카드
+2. **지역별 필터링**: 17개 지역으로 도시 필터링
+3. **검색 기능**: 도시명, 지역명, 태그로 검색
+4. **정렬 기능**: 노마드 점수, 생활비, 인터넷 속도 등으로 정렬
+5. **반응형 디자인**: 모바일/데스크톱 최적화
+6. **이미지 슬라이더**: 히어로 섹션의 동적 이미지 전환
+
+## 데이터 구조
+
+- **regions**: 지역별 도시 수 정보
+- **cities**: 각 도시의 상세 정보 (이름, 지역, 이미지, 점수, 비용, 인터넷 속도, 카페 밀도, 태그)
+- **heroImages**: 히어로 섹션용 이미지 배열
