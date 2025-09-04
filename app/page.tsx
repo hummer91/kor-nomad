@@ -407,7 +407,7 @@ export default function HomePage() {
 								KOR NOMAD
 							</h4>
 							<p className="text-primary-foreground/80 mb-3 sm:mb-4 text-sm sm:text-base">
-								한국 디지털 노마드 커뮤니티
+								한국 디지털 노마드 커뮤니티 !!
 							</p>
 
 							{/* Social Media Icons */}
